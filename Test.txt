@@ -1,0 +1,18 @@
+# Variables
+$DHCPServerName = "NomDeVotreServeur" # Remplacez "NomDeVotreServeur" par le nom de votre serveur DHCP
+$StartRange = "192.168.10.10" # Adresse IP de début de l'étendue
+$EndRange = "192.168.10.100" # Adresse IP de fin de l'étendue
+$SubnetMask = "255.255.255.0"
+$LeaseDuration = "8.00:00:00" # 8 jours de durée de bail
+$VLANName = "VLAN10" # Nom de l'étendue (VLAN)
+$Gateway = "192.168.10.1" # Passerelle pour cette VLAN
+$DNS1 = "192.168.1.10" # Premier serveur DNS
+$DNS2 = "192.168.1.11" # Second serveur DNS (si vous en avez un autre)
+
+# Créer l'étendue DHCP
+Add-DhcpServerv4Scope -Name $VLANName -StartRange $StartRange -EndRange $EndRange -SubnetMask $SubnetMask -LeaseDuration $LeaseDuration -ComputerName $DHCPServerName
+
+# Configurer les options de l'étendue
+Set-DhcpServerv4OptionValue -ScopeId $StartRange -Router $Gateway -DnsServer $DNS1, $DNS2 -ComputerName $DHCPServerName
+
+Write-Host "Étendue DHCP pour $VLANName créée et configurée avec succès!" -ForegroundColor Green
